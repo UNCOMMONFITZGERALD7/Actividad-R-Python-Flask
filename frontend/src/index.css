@@ -1,0 +1,20 @@
+:root {
+  --texto-titulos: #6b6375;
+  --texto-contenidos: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+}
+
+body {
+  background-color: var(--bg);
+  margin: 0;
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
