@@ -53,6 +53,6 @@ Queda en http://localhost:5173
 
 ## Notas
 
-- PostgreSQL debe estar corriendo y con las tablas paridad, tablamult y numerorandom creadas.
+- PostgreSQL debe estar corriendo y con las tablas paridad, tablamult y numerorandom creadas. (Cuando se le agregue POO no hara falta crear tablas, ya que el backend se encargara de ese proceso al inicializar)
 - Si PowerShell no deja activar el entorno virtual, ejecutar una vez: `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
 - Cambiar `backend` y `frontend` por el nombre real de tus carpetas.
