@@ -1,5 +1,4 @@
-# como concatenar py + html + css
-# que el codigo sea py, pero que implemente la belleza de los frameworks
+# la belleza de los frameworks
 # Orientacion a la web
 
 # Py <- Frameworks propios -> Flask - Django
