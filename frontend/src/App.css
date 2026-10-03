@@ -128,11 +128,11 @@ p {
   flex-wrap: wrap;
   gap: 8px;
   padding: 1em;
-  height: 225px;
+  height: fit-content;
   width: fit-content;
   align-items: center;
   text-align: center;
-  background-color: rgb(135, 108, 0);
+  background-color: #e0ea25fe;
   border-radius: 8px;
   box-shadow: none;
   transform: none;
@@ -142,15 +142,21 @@ p {
 
 .tabla-de-multiplicar:hover {
   box-shadow: 0 0 15px #0006;
-  transform: scale(1.02);
+  transform: scale(1.005);
 }
 
 .capsula-multiplicadora {
   display: flex;
+  width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  background-color: #fffe;
+  border-radius: 4px;
+  font-weight: 600;
+  color: #000b;
+  padding: 0.2em 0.4em;
 }
 
 .contenedortitulo {
@@ -244,6 +250,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.518));
 }
 
 #modalCargando {
@@ -262,7 +269,7 @@ p {
 .honeycomb div {
   -webkit-animation: honeycomb 2.1s infinite backwards;
   animation: honeycomb 2.1s infinite backwards;
-  background: #f3f3f3;
+  background: #cdb627;
   height: 12px;
   margin-top: 6px;
   position: absolute;
@@ -281,12 +288,12 @@ p {
 
 .honeycomb div:after {
   top: -6px;
-  border-bottom: 6px solid #f3f3f3;
+  border-bottom: 6px solid #cdb627;
 }
 
 .honeycomb div:before {
   bottom: -6px;
-  border-top: 6px solid #f3f3f3;
+  border-top: 6px solid #cdb627;
 }
 
 .honeycomb div:nth-child(1) {

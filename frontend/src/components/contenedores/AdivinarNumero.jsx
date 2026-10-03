@@ -4,11 +4,13 @@ import { BotonDefault } from "../botones/BotonDefault";
 import { API } from "../../config/config";
 import DecryptedText from "../titulos/Menciones";
 
-export function AdivinarNumero() {
+const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
+
+
+export function AdivinarNumero({ cargando, setCargando }) {
     const [numero, setNumero] = useState(null);
     const [valor, setValor] = useState("");
     const [error, setError] = useState(null);
-    const [cargando, setCargando] = useState(false);
     const [aviso, setAviso] = useState(null);
 
     const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
@@ -40,6 +42,7 @@ export function AdivinarNumero() {
         setValor("");
 
         try {
+            await esperar(1000)
             const respuesta = await fetch(API + '/api/numerorandom', {
                 method: 'POST',
                 headers: {
@@ -65,6 +68,7 @@ export function AdivinarNumero() {
         setAviso(null)
         setCargando(true)
 
+        
         try {
             await esperar(1600)
             if (Number(val) === numero) {
@@ -92,9 +96,11 @@ export function AdivinarNumero() {
                     encryptedClassName="encrypted texto-subtitulos"
                 />
             </div>
-            <p>Adivina el numero entre el 1 al 10. ¡Buena suerte!</p>
+            <p className="opacity-70">Adivina el numero entre el 1 al 10. ¡Buena suerte!</p>
             {error && <p className="text-red-600">{error}</p>}
-            {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : 'Sigue intentando.'}
+            <p className={aviso ? 'my-4 opacity-85 text-green-500' : 'my-2 opacity-85 text-gray-800'}>
+                {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : 'Sigue intentando.'}
+            </p>
             <InputPlantilla label="Ingresa el numero" ident="guessnumero" inputtype="number" entero value={valor} onChange={(e) => setValor(e.target.value)} />
             <div className="bt-conjunto">
                 <BotonDefault

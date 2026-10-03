@@ -118,7 +118,7 @@ export function TablasMultiplicar({ setCargando, cargando }) {
                                 encryptedClassName="encrypted texto-subtitulos"
                             />
                         </div>
-            <form className="formulario-default" onSubmit={manejarFormulario}>
+            <form className="formulario-default my-6" onSubmit={manejarFormulario}>
                 <InputPlantilla
                     label="Ingresa el numero"
                     ident="numeroImPar"
@@ -139,7 +139,7 @@ export function TablasMultiplicar({ setCargando, cargando }) {
                         {historial.map((item) => (
                             <div className="tabla-de-multiplicar" key={item.id}>
                                 <CapsulaMultiplicadora numero={item.numero} />
-                                <BotonDefault className="boton-eliminar-item" onClick={() => (eliminarTabla(item.id))} nombre="&times;" />
+                                <BotonDefault className="boton-eliminar-item" onClick={() => (eliminarTabla(item.id))} nombre="Eliminar" />
                             </div>
                         ))}
                     </div>}

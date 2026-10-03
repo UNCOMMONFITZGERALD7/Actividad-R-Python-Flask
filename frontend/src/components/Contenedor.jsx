@@ -13,7 +13,7 @@ function GeneradorTarea({ dato, setCargando, cargando }) {
         case 'segundo':
             return <TablasMultiplicar cargando={cargando} setCargando={setCargando} />
         case 'tercero':
-            return <AdivinarNumero />
+            return <AdivinarNumero cargando={cargando} setCargando={setCargando} />
         default:
             return (
                 <div className="contenedortitulo">

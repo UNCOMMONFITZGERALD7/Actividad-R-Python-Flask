@@ -16,7 +16,8 @@ export function Cargando({ estado }) {
             id="modalCargando"
             className="fixed inset-0 m-auto bg-transparent border-none p-0 outline-none overflow-hidden max-w-none max-h-none flex items-center justify-center backdrop:bg-black/50 backdrop:backdrop-blur-sm"
         >
-            {estado && <div className="flex items-center justify-center w-32 h-32">
+            {
+            estado && <div className="flex items-center justify-center w-32 h-32">
                 <div className="honeycomb">
                     <div />
                     <div />
@@ -26,7 +27,8 @@ export function Cargando({ estado }) {
                     <div />
                     <div />
                 </div>
-            </div>}
+            </div>
+            }
         </dialog>
     )
 }
