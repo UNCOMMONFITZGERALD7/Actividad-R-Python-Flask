@@ -68,7 +68,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
         setAviso(null)
         setCargando(true)
 
-        
+
         try {
             await esperar(1600)
             if (Number(val) === numero) {
@@ -80,7 +80,6 @@ export function AdivinarNumero({ cargando, setCargando }) {
         } finally {
             setCargando(false)
         }
-
     }
 
     return (
