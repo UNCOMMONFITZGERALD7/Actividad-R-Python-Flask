@@ -269,8 +269,7 @@ def eliminar_tabla():
     
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(
-                "DELETE FROM tablamult WHERE id = %s ", (id_eliminar,))
+            cur.execute("DELETE FROM tablamult WHERE id = %s ", (id_eliminar,))
             cur.execute("SELECT * FROM tablamult ORDER BY id")
             datos = cur.fetchall()
             conn.commit()
