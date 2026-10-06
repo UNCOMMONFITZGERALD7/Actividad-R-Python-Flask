@@ -14,7 +14,10 @@ export function PareImpar({ setCargando, cargando }) {
         async function cargarHistorial() {
             try {
                 const respuesta = await fetch(API + "/api/paridad")
-                if (!respuesta.ok) throw new Error(`Error del servidor (${respuesta.status})`)
+                if (!respuesta.ok) {
+                    const cuerpo = await respuesta.json().catch(() => ({}))
+                    throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+                }
                 const datos = await respuesta.json()
                 setHistorial(datos)
             } catch (err) {
@@ -40,7 +43,10 @@ export function PareImpar({ setCargando, cargando }) {
                 body: JSON.stringify({ numero: Number(valor) })
             })
 
-            if (!respuesta.ok) throw new Error(`(Error de servicio - ${respuesta.status})`)
+            if (!respuesta.ok) {
+                const cuerpo = await respuesta.json().catch(() => ({}))
+                throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+            }
 
             const datos = await respuesta.json()
             await esperar(3000)

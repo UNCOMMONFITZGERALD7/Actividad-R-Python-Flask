@@ -2,20 +2,23 @@ import { BotonDefault } from "../botones/BotonDefault";
 import { InputPlantilla } from "../inputs/InputPlantilla";
 import { useState, useEffect } from "react";
 import { API } from "../../config/config";
-import DecryptedText  from "../titulos/Menciones";
+import DecryptedText from "../titulos/Menciones";
 
 
 export function TablasMultiplicar({ setCargando, cargando }) {
     const [valor, setValor] = useState("")
     const [historial, setHistorial] = useState([])
     const [error, setError] = useState(null)
-    
+
     useEffect(() => {
         async function cargarHistorial() {
             try {
                 const respuesta = await fetch(API + "/api/tablamult")
-                if (!respuesta.ok) throw new Error(`Error del servidor (${respuesta.status})`)
-                    const datos = await respuesta.json()
+                if (!respuesta.ok) {
+                    const cuerpo = await respuesta.json().catch(() => ({}))
+                    throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+                }
+                const datos = await respuesta.json()
                 setHistorial(datos)
             } catch (err) {
                 console.error(err)
@@ -24,7 +27,7 @@ export function TablasMultiplicar({ setCargando, cargando }) {
         }
         cargarHistorial()
     }, [])
-    
+
     async function manejarFormulario(e) {
         e.preventDefault();
         if (valor === "") return;
@@ -33,32 +36,35 @@ export function TablasMultiplicar({ setCargando, cargando }) {
         setError(null);
 
         const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
-        
+
         try {
             const respuesta = await fetch(API + "/api/tablamult", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ numero: Number(valor) })
             })
-            
-            if (!respuesta.ok) throw new Error(`(Error de servicio - ${respuesta.status})`)
-                
-                const datos = await respuesta.json()
-                await esperar(2500)
-                setHistorial((actuales) => [datos, ...actuales])
-                
-                setValor("")
-            } catch (err) {
-                setError(
+
+            if (!respuesta.ok) {
+                const cuerpo = await respuesta.json().catch(() => ({}))
+                throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+            }
+
+            const datos = await respuesta.json()
+            await esperar(2500)
+            setHistorial((actuales) => [datos, ...actuales])
+
+            setValor("")
+        } catch (err) {
+            setError(
                 err instanceof TypeError ? "No se pudo conectar al servidor" : err.message
             )
         } finally {
             setCargando(false)
         }
     }
-    
+
     async function eliminarTabla(ide) {
-        
+
         setCargando(true);
         setError(null);
         const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
@@ -69,7 +75,10 @@ export function TablasMultiplicar({ setCargando, cargando }) {
                 body: JSON.stringify({ id_eliminar: Number(ide) })
             })
 
-            if (!respuesta.ok) throw new Error(`(Error de servicio - ${respuesta.status})`)
+            if (!respuesta.ok) {
+                const cuerpo = await respuesta.json().catch(() => ({}))
+                throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+            }
 
             const datos = await respuesta.json()
             await esperar(2000)
@@ -79,14 +88,14 @@ export function TablasMultiplicar({ setCargando, cargando }) {
             console.log(err);
             setError(
                 err instanceof TypeError
-                ? "No se pudo conectar con el servidor"
-                : err.message
+                    ? "No se pudo conectar con el servidor"
+                    : err.message
             )
         } finally {
             setCargando(false)
         }
     }
-    
+
     function CapsulaMultiplicadora({ numero }) {
         const datos = []
         for (let i = 0; i < 11; i++) {
@@ -104,20 +113,20 @@ export function TablasMultiplicar({ setCargando, cargando }) {
             ))
         )
     }
-    
+
     return (
         <>
             <div className="contenedortitulo">
-                            <DecryptedText
-                                text={"Generador de Tablas de Multiplicar"}
-                                speed={30}
-                                maxIterations={10}
-                                characters="abcdefghijklmopqrstuvwxyz+-%&$#!.,234!?"
-                                className="revealed texto-subtitulos"
-                                parentClassName="all-letters"
-                                encryptedClassName="encrypted texto-subtitulos"
-                            />
-                        </div>
+                <DecryptedText
+                    text={"Generador de Tablas de Multiplicar"}
+                    speed={30}
+                    maxIterations={10}
+                    characters="abcdefghijklmopqrstuvwxyz+-%&$#!.,234!?"
+                    className="revealed texto-subtitulos"
+                    parentClassName="all-letters"
+                    encryptedClassName="encrypted texto-subtitulos"
+                />
+            </div>
             <form className="formulario-default my-6" onSubmit={manejarFormulario}>
                 <InputPlantilla
                     label="Ingresa el numero"
