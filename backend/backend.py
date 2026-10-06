@@ -87,7 +87,7 @@ def introduccion():
 #     datos = request.get_json(silent=True) or {}
 #     tarea = datos.get("completada")
 #     if not isinstance(tarea, bool):
-#         return jsonify({'error': 'Datos invalidos'}), 401
+#         return jsonify({'error': 'Datos invalidos'}), 400
     
 #     conn = conexionpsql()
     
@@ -100,7 +100,7 @@ def introduccion():
 #             )
 #             nueva = cur.fetchone()
 #             if not nueva:
-#                 return jsonify({'error' : 'Valor invalido'}), 401
+#                 return jsonify({'error' : 'Valor invalido'}), 400
 #         conn.commit()
 #     except Exception:
 #         conn.rollback()
@@ -118,7 +118,7 @@ def introduccion():
 #     titulo = datos.get("titulo")
     
 #     if not titulo:
-#         return jsonify({'error': 'Valor invalido'}), 401
+#         return jsonify({'error': 'Valor invalido'}), 400
     
 #     conn = conexionpsql()
     
@@ -151,7 +151,7 @@ def ingresar_tareas():
     numero = datos.get("numero")
     
     if not numero:
-        return jsonify({'error': 'Valor invalido'}), 401
+        return jsonify({'error': 'Valor invalido'}), 400
     
     conn = conexionpsql()
     
@@ -234,7 +234,7 @@ def ingresar_tablas():
     numero = datos.get("numero")
     
     if not numero:
-        return jsonify({'error': 'Valor invalido'}), 401
+        return jsonify({'error': 'Valor invalido'}), 400
     
     conn = conexionpsql()
     

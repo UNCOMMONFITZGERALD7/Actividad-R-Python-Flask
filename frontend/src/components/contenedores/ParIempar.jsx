@@ -73,7 +73,10 @@ export function PareImpar({ setCargando, cargando }) {
                 body: JSON.stringify({ id_eliminar: Number(ide) })
             })
 
-            if (!respuesta.ok) throw new Error(`(Error de servicio - ${respuesta.status})`)
+            if (!respuesta.ok) {
+                const cuerpo = await respuesta.json().catch(() => ({}))
+                throw new Error(cuerpo.error ?? `Error de servicio (${respuesta.status})`)
+            }
 
             const datos = await respuesta.json()
             await esperar(2000)
