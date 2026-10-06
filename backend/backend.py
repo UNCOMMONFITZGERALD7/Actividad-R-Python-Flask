@@ -150,7 +150,7 @@ def ingresar_tareas():
     datos = request.get_json(silent=True) or {}
     numero = datos.get("numero")
     
-    if not numero:
+    if isinstance(numero, int):
         return jsonify({'error': 'Valor invalido'}), 400
     
     conn = conexionpsql()
@@ -169,7 +169,7 @@ def ingresar_tareas():
         conn.commit()
     except Exception:
         conn.rollback()
-        raise
+        return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()
     
@@ -193,25 +193,31 @@ def eliminar_item():
     requisicion = request.get_json(silent=True) or {}
     id_eliminar = requisicion.get("id_eliminar")    
 
-    if isinstance(id_eliminar, str):
+    if isinstance(id_eliminar, int):
+        conn = conexionpsql()
+        
+        try:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "DELETE FROM paridad WHERE id = %s ", (id_eliminar,))
+
+                if cur.rowcount == 0:
+                    return jsonify({'error': 'Valor invalido'}), 404
+                
+                conn.commit()                
+
+                cur.execute("SELECT * FROM paridad ORDER BY id")
+                datos = cur.fetchall()
+        except Exception:
+            conn.rollback()
+            return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
+        finally:
+            conn.close()
+        
+        return jsonify(datos), 200
+    else:
         return jsonify({'error': 'Valor invalido'}), 400
     
-    conn = conexionpsql()
-    
-    try:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute(
-                "DELETE FROM paridad WHERE id = %s ", (id_eliminar,))
-            cur.execute("SELECT * FROM paridad ORDER BY id")
-            datos = cur.fetchall()
-            conn.commit()
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
-    
-    return jsonify(datos), 200
 
 
 ### TABLA DE MULTIPLICAR
@@ -233,7 +239,7 @@ def ingresar_tablas():
     datos = request.get_json(silent=True) or {}
     numero = datos.get("numero")
     
-    if not numero:
+    if isinstance(numero, int):
         return jsonify({'error': 'Valor invalido'}), 400
     
     conn = conexionpsql()
@@ -249,7 +255,7 @@ def ingresar_tablas():
         conn.commit()
     except Exception:
         conn.rollback()
-        raise
+        return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()
     
@@ -263,23 +269,26 @@ def eliminar_tabla():
     id_eliminar = requisicion.get("id_eliminar")    
 
     if isinstance(id_eliminar, str):
+        conn = conexionpsql()
+        
+        try:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute("DELETE FROM tablamult WHERE id = %s ", (id_eliminar,))
+                cur.execute("SELECT * FROM tablamult ORDER BY id")
+                datos = cur.fetchall()
+                if cur.rowcount() == 0:
+                    conn.commit()
+        except Exception:
+            conn.rollback()
+            return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
+        finally:
+            conn.close()
+        
+        return jsonify(datos), 200
+    else:
         return jsonify({'error': 'Valor invalido'}), 400
+        
     
-    conn = conexionpsql()
-    
-    try:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            cur.execute("DELETE FROM tablamult WHERE id = %s ", (id_eliminar,))
-            cur.execute("SELECT * FROM tablamult ORDER BY id")
-            datos = cur.fetchall()
-            conn.commit()
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
-    
-    return jsonify(datos), 200
 
 ### NUMERO SECRETO
 
@@ -301,7 +310,7 @@ def numero_random():
         conn.commit()
     except Exception:
         conn.rollback()
-        raise
+        return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()
 
@@ -323,8 +332,9 @@ def cambiar_numero():
         conn.commit()
     except Exception:
         conn.rollback()
-        raise
+        return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()
         
     return jsonify(numero_nuevo), 200
+
