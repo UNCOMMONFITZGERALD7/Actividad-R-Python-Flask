@@ -28,10 +28,6 @@ export function PareImpar({ setCargando, cargando }) {
         cargarHistorial()
     }, [])
 
-    function verificarValor(valor, min, max) {
-        return Number.isInteger(valor) && n >= min && n <= max
-    }
-
     function esNumeroValido(n, min, max) {
         return Number.isInteger(n) && n >= min && n <= max
     }
@@ -40,7 +36,7 @@ export function PareImpar({ setCargando, cargando }) {
         e.preventDefault();
         const n = Number(valor)
         if (valor === "" || !esNumeroValido(n, 0, 99999)) {
-            setError(`Ingresa un entero entre 0 y 99999S`)
+            setError(`Ingresa un entero entre 0 y 99999`)
             return
         }
 

@@ -64,13 +64,26 @@ export function AdivinarNumero({ cargando, setCargando }) {
         }
     };
 
-    async function evaluarResultado(val) {
-        setAviso(null)
-        setCargando(true)
+    function esNumeroValido(n, min, max) {
+        return Number.isInteger(n) && n <= 10 && n >= 0
+    }
 
+    async function evaluarResultado(val) {
+        
+        const n = Number(val)
+        if (valor === '' || !esNumeroValido(n, 0, 10)) {
+            setCargando(true)
+            await esperar(1000)
+            setError('Valor fuera del rango!!!')
+            setCargando(false)
+            return
+        }
+        
+        setCargando(true)
+        setAviso(null)
         try {
             await esperar(1600)
-            if (Number(val) === numero) {
+            if (n === numero) {
                 setAviso(true)
             } else {
                 setValor("")

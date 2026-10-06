@@ -28,9 +28,18 @@ export function TablasMultiplicar({ setCargando, cargando }) {
         cargarHistorial()
     }, [])
 
+    function esNumeroValido(n, min, max) {
+        return Number.isInteger(n) && n >= min && n <= max
+    }
+
     async function manejarFormulario(e) {
         e.preventDefault();
-        if (valor === "") return;
+        const n = Number(valor)
+
+        if (valor === "" || !esNumeroValido(n, 0, 250)) {
+            setError("Ingresa un numero valido entre 0 y 250")
+            return
+        }
 
         setCargando(true);
         setError(null);
