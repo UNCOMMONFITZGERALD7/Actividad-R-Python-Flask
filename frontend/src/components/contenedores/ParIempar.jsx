@@ -29,15 +29,20 @@ export function PareImpar({ setCargando, cargando }) {
     }, [])
 
     function verificarValor(valor, min, max) {
-        return Number.isInteger(valor) && Math.clamp(min, max, valor)
+        return Number.isInteger(valor) && n >= min && n <= max
+    }
+
+    function esNumeroValido(n, min, max) {
+        return Number.isInteger(n) && n >= min && n <= max
     }
 
     async function manejarFormulario(e) {
         e.preventDefault();
-        if (!verificarValor(valor, 0, 99999)) {
-            setError("Valor invalido, rango recomendado 0-9000")
+        const n = Number(valor)
+        if (valor === "" || !esNumeroValido(n, 0, 99999)) {
+            setError(`Ingresa un entero entre 0 y 99999S`)
             return
-        };
+        }
 
         setCargando(true);
         setError(null);
@@ -46,7 +51,7 @@ export function PareImpar({ setCargando, cargando }) {
             const respuesta = await fetch(API + "/api/paridad", {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ numero: Number(valor) })
+                body: JSON.stringify({ numero: n })
             })
 
             if (!respuesta.ok) {
@@ -74,10 +79,6 @@ export function PareImpar({ setCargando, cargando }) {
         }
     }
     async function eliminarDato(ide) {
-        if (!verificarValor(valor, 0, 99999)) {
-            setError("Valor invalido, rango recomendado 0-9000")
-            return
-        };
 
         setCargando(true);
         setError(null);
@@ -114,7 +115,7 @@ export function PareImpar({ setCargando, cargando }) {
         <>
             <div className="contenedortitulo">
                 <DecryptedText
-                    text={valor != "" ? 'Verificando Numero' : 'Verificar Paridad de Numero'}
+                    text={valor !== "" ? 'Verificando Numero' : 'Verificar Paridad de Numero'}
                     speed={30}
                     maxIterations={10}
                     characters="abcdefghijklmopqrstuvwxyz+-%&$#!.,234!?"
