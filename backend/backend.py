@@ -153,7 +153,7 @@ def ingresar_tareas():
     datos = request.get_json(silent=True) or {}
     numero = datos.get("numero")
     
-    if entero_valido(numero, 0, 10000):
+    if entero_valido(numero, 0, 99999):
         conn = conexionpsql()
         
         try:
