@@ -274,7 +274,7 @@ def eliminar_tabla():
     requisicion = request.get_json(silent=True) or {}
     id_eliminar = requisicion.get("id_eliminar")    
 
-    if entero_valido(id_eliminar, 0, 99999):
+    if entero_valido(id_eliminar, 0, 999999):
         conn = conexionpsql()
         
         try:
