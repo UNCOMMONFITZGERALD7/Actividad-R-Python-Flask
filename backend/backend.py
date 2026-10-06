@@ -317,6 +317,7 @@ def numero_random():
         conn.commit()
     except Exception:
         conn.rollback()
+        app.logger.exception("Error en GET /api/numerorandom")
         return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()
@@ -331,16 +332,16 @@ def cambiar_numero():
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
-                "UPDATE numerorandom SET numero = %s WHERE id = 1 ", (randomnum,))
+                "UPDATE numerorandom SET numero = %s WHERE id = 1 "
+                "RETURNING numero"
+                , (randomnum,))
             if cur.rowcount == 0:
                 return jsonify({'error': 'No Existe ningun registro'}), 404
             conn.commit()
-            cur.execute(
-                "RETURNING numero",
-            )
             numero_nuevo = cur.fetchone()
     except Exception:
         conn.rollback()
+        app.logger.exception("Error en GET /api/numerorandom")
         return jsonify({'error': 'Ha ocurrido un error interno en el servidor'}), 500
     finally:
         conn.close()

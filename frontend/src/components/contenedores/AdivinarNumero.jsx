@@ -12,8 +12,17 @@ export function AdivinarNumero({ cargando, setCargando }) {
     const [valor, setValor] = useState("");
     const [error, setError] = useState(null);
     const [aviso, setAviso] = useState(null);
+    const [intentos, setIntentos] = useState(3);
 
     const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
+
+    if (intentos === 0) {
+        setError(null)
+        actualizarNumero
+        setAviso(null)
+        setIntentos(3)
+        setError('¡Intentos y reestablecidos!\n¡Numero reiniciado!')
+    }
 
     useEffect(() => {
         const inicializarNumero = async () => {
@@ -25,7 +34,6 @@ export function AdivinarNumero({ cargando, setCargando }) {
 
                 const datos = await respuesta.json();
                 setNumero(datos.numero)
-                console.log(datos.numero);
             } catch (err) {
                 console.log("Error al inicializar:", err.message);
                 setError(err.message);
@@ -40,6 +48,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
         setError(null);
         setAviso(null);
         setValor("");
+        setIntentos(3);
 
         try {
             await esperar(1000)
@@ -57,6 +66,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
             const datos = await respuesta.json();
             await esperar(1200);
             setNumero(datos.numero);
+            console.log(datos.numero);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -65,7 +75,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
     };
 
     function esNumeroValido(n, min, max) {
-        return Number.isInteger(n) && n <= 10 && n >= 0
+        return Number.isInteger(n) && n >= min && n <= max
     }
 
     async function evaluarResultado(val) {
@@ -78,7 +88,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
             setCargando(false)
             return
         }
-        
+        setIntentos(intentos - 1)
         setCargando(true)
         setAviso(null)
         try {
@@ -110,7 +120,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
             <p className="opacity-70">Adivina el numero entre el 1 al 10. ¡Buena suerte!</p>
             {error && <p className="text-red-600">{error}</p>}
             <p className={aviso ? 'my-4 opacity-85 text-green-500' : 'my-2 opacity-85 text-gray-800'}>
-                {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : 'Sigue intentando.'}
+                {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : Number(valor) - numero <= 3 ? `Estas cerca te quedan ${intentos} intentos` : `Estas lejos ¡Sigue intentando! Te quedan ${intentos} intentos`}
             </p>
             <InputPlantilla label="Ingresa el numero" ident="guessnumero" inputtype="number" entero value={valor} onChange={(e) => setValor(e.target.value)} />
             <div className="bt-conjunto">
