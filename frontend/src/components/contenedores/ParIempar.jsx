@@ -28,10 +28,16 @@ export function PareImpar({ setCargando, cargando }) {
         cargarHistorial()
     }, [])
 
+    function verificarValor(valor, min, max) {
+        return Number.isInteger(valor) && Math.clamp(min, max, valor)
+    }
 
     async function manejarFormulario(e) {
         e.preventDefault();
-        if (valor === "") return;
+        if (!verificarValor(valor, 0, 99999)) {
+            setError("Valor invalido, rango recomendado 0-9000")
+            return
+        };
 
         setCargando(true);
         setError(null);
@@ -68,6 +74,10 @@ export function PareImpar({ setCargando, cargando }) {
         }
     }
     async function eliminarDato(ide) {
+        if (!verificarValor(valor, 0, 99999)) {
+            setError("Valor invalido, rango recomendado 0-9000")
+            return
+        };
 
         setCargando(true);
         setError(null);
