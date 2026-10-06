@@ -74,7 +74,11 @@ export function PareImpar({ setCargando, cargando }) {
         }
     }
     async function eliminarDato(ide) {
-        
+        if (!verificarValor(valor, 0, 99999)) {
+            setError("Valor invalido, rango recomendado 0-9000")
+            return
+        };
+
         setCargando(true);
         setError(null);
         const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
