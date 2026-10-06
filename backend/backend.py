@@ -198,7 +198,7 @@ def eliminar_item():
     requisicion = request.get_json(silent=True) or {}
     id_eliminar = requisicion.get("id_eliminar")    
 
-    if isinstance(id_eliminar, int):
+    if entero_valido(id_eliminar, 0, 999999):
         conn = conexionpsql()
         
         try:
@@ -244,7 +244,7 @@ def ingresar_tablas():
     datos = request.get_json(silent=True) or {}
     numero = datos.get("numero")
     
-    if entero_valido(numero, 0, 1250):    
+    if entero_valido(numero, 0, 250):    
         conn = conexionpsql()
         
         try:
@@ -274,7 +274,7 @@ def eliminar_tabla():
     requisicion = request.get_json(silent=True) or {}
     id_eliminar = requisicion.get("id_eliminar")    
 
-    if isinstance(id_eliminar, int):
+    if entero_valido(id_eliminar, 0, 99999):
         conn = conexionpsql()
         
         try:
