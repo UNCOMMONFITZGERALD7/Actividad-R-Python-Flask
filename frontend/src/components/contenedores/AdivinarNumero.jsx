@@ -15,34 +15,6 @@ export function AdivinarNumero({ cargando, setCargando }) {
     const [intentos, setIntentos] = useState(3);
 
     const esperar = (ms) => new Promise((resultado) => setTimeout(resultado, ms));
-
-    if (intentos === 0) {
-        setError(null)
-        actualizarNumero
-        setAviso(null)
-        setIntentos(3)
-        setError('¡Intentos y reestablecidos!\n¡Numero reiniciado!')
-    }
-
-    useEffect(() => {
-        const inicializarNumero = async () => {
-            try {
-                const respuesta = await fetch(API + '/api/numerorandom');
-                if (!respuesta.ok) {
-                    throw new Error('El registro ya existe o hubo un error');
-                }
-
-                const datos = await respuesta.json();
-                setNumero(datos.numero)
-            } catch (err) {
-                console.log("Error al inicializar:", err.message);
-                setError(err.message);
-            }
-        };
-
-        inicializarNumero();
-    }, []);
-
     const actualizarNumero = async () => {
         setCargando(true);
         setError(null);
@@ -73,6 +45,36 @@ export function AdivinarNumero({ cargando, setCargando }) {
             setCargando(false);
         }
     };
+    
+    useEffect(() => {
+        const inicializarNumero = async () => {
+            try {
+                const respuesta = await fetch(API + '/api/numerorandom');
+                if (!respuesta.ok) {
+                    throw new Error('El registro ya existe o hubo un error');
+                }
+
+                const datos = await respuesta.json();
+                setNumero(datos.numero)
+                console.log(datos.numero);
+            } catch (err) {
+                console.log("Error al inicializar:", err.message);
+                setError(err.message);
+            }
+        };
+
+        inicializarNumero();
+    }, []);
+
+    if (intentos === 0) {
+        setError(null)
+
+        setAviso(null)
+        setIntentos(3)
+        setError('¡Intentos y reestablecidos!\n¡Numero reiniciado!')
+    }
+
+
 
     function esNumeroValido(n, min, max) {
         return Number.isInteger(n) && n >= min && n <= max
@@ -120,7 +122,7 @@ export function AdivinarNumero({ cargando, setCargando }) {
             <p className="opacity-70">Adivina el numero entre el 1 al 10. ¡Buena suerte!</p>
             {error && <p className="text-red-600">{error}</p>}
             <p className={aviso ? 'my-4 opacity-85 text-green-500' : 'my-2 opacity-85 text-gray-800'}>
-                {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : Number(valor) - numero <= 3 ? `Estas cerca te quedan ${intentos} intentos` : `Estas lejos ¡Sigue intentando! Te quedan ${intentos} intentos`}
+                {aviso ? `¡Ganaste! el numero es ${numero}` : aviso === null ? '¡ADIVINA!' : Number(valor) - numero <= 3 && intentos != 3 ? `Estas cerca te quedan ${intentos} intentos` : intentos != 3 ? `Estas lejos ¡Sigue intentando! Te quedan ${intentos} intentos` : ''}
             </p>
             <InputPlantilla label="Ingresa el numero" ident="guessnumero" inputtype="number" entero value={valor} onChange={(e) => setValor(e.target.value)} />
             <div className="bt-conjunto">
