@@ -5,6 +5,7 @@ import { Cargando } from "./modales/Cargando";
 import { TablasMultiplicar } from "./contenedores/TablasMultiplicar";
 import { AdivinarNumero } from "./contenedores/AdivinarNumero";
 import DecryptedText from "./titulos/Menciones";
+import Promesas from "./ejemplificaciones/Promesas";
 
 function GeneradorTarea({ dato, setCargando, cargando }) {
     switch (dato) {
@@ -38,7 +39,6 @@ export function Contenedor() {
         setTarea(valor)
     )
 
-
     return (
         <div className="contenedor-padre">
             <div className="contenedor-principal">
@@ -48,6 +48,7 @@ export function Contenedor() {
             </div>
             <section className="contenedor-secundario">
                 <GeneradorTarea dato={tarea} setCargando={setCargando} cargando={cargando} />
+                <Promesas />
                 <Cargando estado={cargando} />
             </section>
         </div>
